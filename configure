@@ -7,10 +7,6 @@ then
 fi
 
 ARCH=$(uname -m)
-if [ $ARCH = amd64 ]
-then ARCH=x86_64
-fi
-
 OS=$(uname -s | tr 'A-Z' 'a-z')
 
 vstr=`${CC:-cc} -v 2>&1`
@@ -23,6 +19,10 @@ if   compiler_is   gcc; then WARN_FLAGS='-Wno-override-init'
 elif compiler_is clang; then WARN_FLAGS='-Wno-initializer-overrides'
 fi
 
+if [ $ARCH = amd64 ]
+then ARCH=x86_64
+fi
+
 if [ "$OS" = darwin ]
 then CODESIGN=codesign
 else CODESIGN=:
@@ -30,7 +30,6 @@ fi
 
 cat > config.mk <<!
 OS_NAME = $OS
-ARCH    = $ARCH
-WARN_FLAGS = $WARN_FLAGS
-CODESIGN   = $CODESIGN
+ARCH = $ARCH
+CODESIGN = $CODESIGN
 !
