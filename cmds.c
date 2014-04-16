@@ -422,20 +422,25 @@ static const struct dispatch
 	const char *s;
 	int (*f)(tracee *, char **);
 	int need_alive;
+	const char *desc;
 } cmds[] = {
-	{ "quit",   c_quit,           0 },
-	{ "help",   c_help,           0 },
-	{ "break",  c_break,          1 }, /* TODO: lazy */
-	{ "x",      c_x_wr,           1 },
-	{ "rall",   c_regs_read,      1 },
-	{ "rr"  ,   c_reg_read,       1 },
-	{ "rw"  ,   c_reg_write,      1 },
-	{ "kill",   c_kill,           1 },
-	{ "cont",   c_cont,           1 },
-	{ "step",   c_step,           1 },
-	{ "signal", c_sig,            1 }, /* TODO: lazy */
-	{ "detach", c_detach,         1 },
-	{ "wr",     c_x_wr,           1 },
+	{ "quit",   c_quit,           0, NULL },
+	{ "detach", c_detach,         1, NULL },
+
+	{ "help",   c_help,           0, NULL },
+
+	{ "rall",   c_regs_read,      1, "read all registers" },
+	{ "rr"  ,   c_reg_read,       1, "register read" },
+	{ "rw"  ,   c_reg_write,      1, "register write" },
+
+	{ "break",  c_break,          1, "place breakpoint" }, /* TODO: lazy */
+	{ "kill",   c_kill,           1, NULL },
+	{ "cont",   c_cont,           1, NULL },
+	{ "step",   c_step,           1, NULL },
+	{ "signal", c_sig,            1, NULL }, /* TODO: lazy */
+
+	{ "x",      c_x_wr,           1, "examine memory" },
+	{ "wr",     c_x_wr,           1, "write memory" },
 
 	{ NULL }
 };
@@ -445,8 +450,12 @@ c_help(tracee *child, char **argv)
 {
 	if(ARG_CHECK(!= 2)){
 		printf("available commands:\n");
-		for(int i = 0; cmds[i].s; i++)
-			printf("  %s\n", cmds[i].s);
+		for(int i = 0; cmds[i].s; i++){
+			if(cmds[i].desc)
+				printf("  %s [%s]\n", cmds[i].s, cmds[i].desc);
+			else
+				printf("  %s\n", cmds[i].s);
+		}
 	}else{
 		/* two args - "help cmd" */
 		cmd_dispatch(child, (char *[]){ argv[1], HELP_ARG, NULL });
