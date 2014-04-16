@@ -8,6 +8,7 @@
 #include "util.h"
 
 void ice(const char *f, int line, const char *fn, const char *fmt, ...);
+noreturn
 void ice(const char *f, int line, const char *fn, const char *fmt, ...)
 {
 	fprintf(stderr, "%s:%d::%s: ICE: ", f, line, fn);

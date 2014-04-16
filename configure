@@ -8,16 +8,7 @@ fi
 
 ARCH=$(uname -m)
 OS=$(uname -s | tr 'A-Z' 'a-z')
-
-vstr=`${CC:-cc} -v 2>&1`
-compiler_is(){
-	echo "$vstr" | grep "$1" > /dev/null
-	return $?
-}
-
-if   compiler_is   gcc; then WARN_FLAGS='-Wno-override-init'
-elif compiler_is clang; then WARN_FLAGS='-Wno-initializer-overrides'
-fi
+CC=${CC:-cc}
 
 if [ $ARCH = amd64 ]
 then ARCH=x86_64
@@ -33,3 +24,19 @@ OS_NAME = $OS
 ARCH = $ARCH
 CODESIGN = $CODESIGN
 !
+
+try_cflag(){
+	outputs=$(echo 'int main(void){ return 0; }' | "${CC}" "$@" -xc - -c -o /dev/null 2>&1 >/dev/null | wc -l)
+	if [ "$outputs" -eq 0 ]
+	then echo "CFLAGS += $@" >>config.mk
+	fi
+}
+
+try_cflag -Wno-override-init
+try_cflag -Wno-initializer-overrides
+try_cflag -Wunused-macros
+try_cflag -Wmissing-prototypes
+try_cflag -Wmissing-noreturn
+try_cflag -Wmissing-variable-declarations
+try_cflag -Wshadow
+try_cflag -Wno-missing-field-initializers
