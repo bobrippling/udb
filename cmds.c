@@ -8,7 +8,7 @@
 #include <limits.h>
 
 #include "util.h"
-#include "../util/dynarray.h"
+#include "dynarray.h"
 #define ARGC(argv) dynarray_count((void **)argv)
 
 #include "arch.h"

@@ -1,7 +1,4 @@
-include ../src_config.mk
 include config.mk
-
-DEP_FILE = Makefile.deps
 
 OBJ     = sdb.o util.o tracee.o prompt.o arch/arch.o cmds.o \
           breakpoint.o signal.o \
@@ -31,13 +28,4 @@ simple: simple.s
 clean:
 	rm -f ${OBJ} sdb
 
-deps:
-	cc ${CPPFLAGS} -MM *.c                                                 > ${DEP_FILE}
-	echo                                                                  >> ${DEP_FILE}
-	PRE=arch/         ; cc ${CPPFLAGS} -MM $$PRE/*.c | sed 's;^;'$$PRE';' >> ${DEP_FILE}
-	echo                                                                  >> ${DEP_FILE}
-	PRE=os/${OS_NAME}/; cc ${CPPFLAGS} -MM $$PRE/*.c | sed 's;^;'$$PRE';' >> ${DEP_FILE}
-
 .PHONY: clean
-
-include ${DEP_FILE}

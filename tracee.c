@@ -12,7 +12,7 @@
 #include "tracee.h"
 #include "util.h"
 
-#include "../util/dynarray.h"
+#include "dynarray.h"
 
 #define TRACEE_INIT(t) memset(t, 0, sizeof *t)
 

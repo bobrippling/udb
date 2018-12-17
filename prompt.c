@@ -3,8 +3,8 @@
 #include <errno.h>
 
 #include "prompt.h"
-#include "../util/dynarray.h"
-#include "../util/alloc.h"
+#include "dynarray.h"
+#include "alloc.h"
 
 /* TODO: term initialisation, char-by-char, completion, etc */
 static char **parse(char *cmd)

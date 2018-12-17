@@ -4,7 +4,7 @@
 #include "arch.h"
 #include "breakpoint.h"
 
-#include "../util/alloc.h"
+#include "alloc.h"
 
 struct bkpt
 {
